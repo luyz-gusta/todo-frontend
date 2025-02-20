@@ -13,10 +13,15 @@ interface TaskProps {
   task: Task;
   index: number;
   handleStatus: (task: Task, index: number) => void;
-  reloadTask: VoidFunction
+  reloadTask: VoidFunction;
 }
 
-export default function TaskItem({ task, index, handleStatus, reloadTask }: TaskProps) {
+export default function TaskItem({
+  task,
+  index,
+  handleStatus,
+  reloadTask,
+}: TaskProps) {
   const navigate = useNavigate();
   const { setIsOpenModal, isOpenModal } = useContexts();
   const handleDelete = async () => {
@@ -25,8 +30,8 @@ export default function TaskItem({ task, index, handleStatus, reloadTask }: Task
         const returnData = await deleteTask(task.id);
         if (returnData.status === 200) {
           toast.success("Tarefa deletada com sucesso!");
-          setIsOpenModal(false)
-          reloadTask()
+          setIsOpenModal(false);
+          reloadTask();
         } else {
           toast.error("Serviço fora do ar, tente novamente em outro momento.");
         }
@@ -49,7 +54,7 @@ export default function TaskItem({ task, index, handleStatus, reloadTask }: Task
 
   return (
     <>
-      <div className="md:w-4/5 w-full flex justify-between">
+      <div className="md:w-4/5 w-full flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <label className="inline-flex items-center" htmlFor="indigoCheckBox">
             <input
@@ -63,13 +68,18 @@ export default function TaskItem({ task, index, handleStatus, reloadTask }: Task
               checked={task.status === "concluido"}
             />
           </label>
-          <p
-            className={`text-2xl font-normal ${
-              task.status === "concluido" && "line-through text-gray-400"
-            } dark:text-white`}
-          >
-            {task.title} {`#${index + 1}`}
-          </p>
+          <div>
+            <p
+              className={`text-2xl font-normal ${
+                task.status === "concluido" && "line-through text-gray-600"
+              } dark:text-white`}
+            >
+              {task.title}
+            </p>
+            <span className={`text-base font-normal ${
+                task.status === "concluido" && "line-through text-gray-600/80"
+              } dark:text-white/80`}>{`${task.description}`}{`${task.description}`}</span>
+          </div>
         </div>
         <div className="flex gap-4">
           <GoPencil
@@ -85,7 +95,11 @@ export default function TaskItem({ task, index, handleStatus, reloadTask }: Task
         </div>
       </div>
       <hr className="w-full border-violet-600" />
-      <ModalTask isOpen={isOpenModal} setIsOpen={setIsOpenModal} handleDelete={handleDelete}/>
+      <ModalTask
+        isOpen={isOpenModal}
+        setIsOpen={setIsOpenModal}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

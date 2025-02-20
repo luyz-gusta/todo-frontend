@@ -115,6 +115,7 @@ export default function TaskHandler() {
             <input
               type={"text"}
               value={task.title}
+              required={true}
               onChange={(e) => setTask({ ...task, title: e.target.value })}
               name="title"
               placeholder="Digite o titulo da sua tarefa..."
